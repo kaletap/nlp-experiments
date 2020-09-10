@@ -1,7 +1,8 @@
 # Code for my master thesis
 ## Week 1 (7-11 September)
 * look at 'Deep Latent Sequence Model' and understand it (https://arxiv.org/abs/2002.03912)
-* run deep-latent-sequence-model (https://github.com/cindyxinyiwang/deep-latent-sequence-model)
+* run deep-latent-sequence-model (https://github.com/cindyxinyiwang/deep-latent-sequence-model):
+  find a way to translate one sentence into another
 * implement sentiment classification model on a different dataset
 * figure out how to run stuff on the cloud easily
 
