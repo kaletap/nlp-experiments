@@ -1,6 +1,8 @@
 import itertools
+import os
 from typing import List, Union
 
+import pandas as pd
 import torch
 
 
@@ -8,6 +10,9 @@ class Tokenizer:
     def __init__(self, vocab: List[str]):
         self.idx2word = vocab
         self.word2idx = {word: i for i, word in enumerate(vocab)}
+
+    def __len__(self):
+        return len(self.idx2word)
 
     def convert_ids_to_tokens(self, token_ids: Union[int, List[int]]):
         if type(token_ids) == list:
@@ -98,3 +103,18 @@ def translate(model, tokenizer, texts: Union[str, List[str]], target_styles: Uni
     tensors = dataset.get_tensors(texts, target_styles)
     hs = model.translate(*tensors, beam_size=beam_size, max_len=300, poly_norm_m=0)
     return list(map(lambda h: tokenizer.decode(h), hs))
+
+
+def read_column(path):
+    with open(path) as f:
+        lines = [line.strip() for line in f.readlines()]
+    return lines
+
+
+def get_dataset(dataset, split_type='train'):
+    root_data_path = '../deep-latent-sequence-model/data'
+    data_path = os.path.join(root_data_path, dataset)
+    text = read_column(os.path.join(data_path, f'{split_type}.txt'))
+    attr = read_column(os.path.join(data_path, f'{split_type}.attr'))
+    train_df = pd.DataFrame({'text': text, 'attr': attr})
+    return train_df
