@@ -4,6 +4,7 @@ from typing import List, Union
 
 import pandas as pd
 import torch
+from nltk.tokenize import sent_tokenize, word_tokenize
 
 
 class Tokenizer:
@@ -52,8 +53,8 @@ class Tokenizer:
         return [self.pad_single(ids, max_len) for ids in token_ids]
 
     def tokenize(self, text: str, padding=None):
-        """Tokenizes a piece of text. Assumes that dots and commas etc. are taken care of before."""
-        tokens = text.lower().split()
+        """Tokenizes a piece of text."""
+        tokens = [t for toks in text.lower().split(' ') for t in word_tokenize(toks)]
         token_ids = self.convert_tokens_to_ids(tokens)
         if padding and padding > 0:
             n_pad = padding - len(token_ids)
