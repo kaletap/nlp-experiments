@@ -52,9 +52,15 @@ class Tokenizer:
         max_len = max(len(ids) for ids in token_ids)
         return [self.pad_single(ids, max_len) for ids in token_ids]
 
-    def tokenize(self, text: str, padding=None):
-        """Tokenizes a piece of text."""
-        tokens = [t for toks in text.lower().split(' ') for t in word_tokenize(toks)]
+    def tokenize(self, text: str, padding=None, nltk=False):
+        """
+        Tokenizes a piece of text.
+        nltk option is slower, but takes care of word preprocessing (e.g splitting don't into do and n't).
+        """
+        if nltk:
+            tokens = [t for toks in text.lower().split(' ') for t in word_tokenize(toks)]
+        else:
+            tokens = text.lower().split(' ')
         token_ids = self.convert_tokens_to_ids(tokens)
         if padding and padding > 0:
             n_pad = padding - len(token_ids)
