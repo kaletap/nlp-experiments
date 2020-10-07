@@ -3,12 +3,14 @@ import os
 from typing import List, Union
 
 import pandas as pd
+import numpy as np
 import torch
 from nltk.tokenize import sent_tokenize, word_tokenize
 
 
 class Tokenizer:
     def __init__(self, vocab: List[str]):
+        assert vocab[0] == "<pad>" and vocab[1] == "<unk>"
         self.idx2word = vocab
         self.word2idx = {word: i for i, word in enumerate(vocab)}
 
@@ -18,7 +20,7 @@ class Tokenizer:
     def convert_ids_to_tokens(self, token_ids: Union[int, List[int]]):
         if type(token_ids) == list:
             return [self.idx2word[id_] for id_ in token_ids]
-        elif type(token_ids) == int:
+        elif np.issubdtype(type(token_ids), np.integer):
             return self.idx2word[token_ids]
         else:
             raise TypeError(f'Type of ids should be either list or int but is {type(token_ids)}')
@@ -34,7 +36,9 @@ class Tokenizer:
     def convert_tokens_to_string(self, tokens: List[str]):
         return ' '.join(tokens)
 
-    def decode(self, token_ids: List[int], skip_special_tokens: bool = False):
+    def decode(self, token_ids: Union[int, List[int]], skip_special_tokens: bool = False):
+        if np.issubdtype(type(token_ids), np.integer):
+            return self.convert_ids_to_tokens(token_ids)
         if skip_special_tokens:
             token_ids = [id_ for id_ in token_ids if id_ >= 4]
         token_ids = list(itertools.takewhile(lambda id_: id_ != 0, token_ids))  # getting rid of pad tokens
