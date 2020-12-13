@@ -1,4 +1,3 @@
-# Code for my master thesis
 ## Week 1 (7-11 September)
 * look at 'Deep Latent Sequence Model' and understand it (https://arxiv.org/abs/2002.03912)
 * run deep-latent-sequence-model (https://github.com/cindyxinyiwang/deep-latent-sequence-model):
